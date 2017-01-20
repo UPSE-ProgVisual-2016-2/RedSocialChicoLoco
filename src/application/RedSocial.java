@@ -20,6 +20,7 @@ public class RedSocial {
 				System.out.println(p);
 			}
 		}
+		return personasSeleccionadas;
 	}
 	
 }
