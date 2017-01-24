@@ -32,8 +32,8 @@ public class RedSocial {
 		{
 			if(edadAEvaluar-1 < LocalDate.now().getYear() - p.getFechaNacimiento().getYear())
 			{
-				int meses = LocalDate.now().getMonthValue()-p.getFechaNacimiento().getMonthValue();
-				if(meses > 0)
+				//int meses = LocalDate.now().getMonthValue()-p.getFechaNacimiento().getMonthValue();
+				//if(meses > 0)
 				{
 					personasSeleccionadas.add(p);
 					System.out.println(p);	
