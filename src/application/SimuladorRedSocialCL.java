@@ -1,6 +1,7 @@
 package application;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,6 +85,37 @@ public class SimuladorRedSocialCL {
 				return "Mujeres maduras ";
 			}
 		}  );
+		
+		System.out.println("Enfoque 5: ");
+		//Enfoque 5: Expresiones Lambda
+		RedSocial.buscarPersonasPorCriterioGeneral(miembrosChicoLocoNetwork, 
+					(Persona p) -> p.getGenero() == Persona.Genero.FEMENINO);
+		
+		RedSocial.buscarPersonasPorCriterioGeneral(miembrosChicoLocoNetwork,
+				p -> p.getGenero().equals(Persona.Genero.FEMENINO));
+		
+		
+		RedSocial.buscarPersonasPorCriterioGeneral(miembrosChicoLocoNetwork, 
+				(Persona p) -> p.getGenero() == Persona.Genero.MASCULINO 
+				&& (p.getFechaNacimiento().getYear() 
+						- Period.between(LocalDate.now(), p.getFechaNacimiento()).getYears()) > 18);
+		
+		RedSocial.buscarPersonasPorCriterioGeneral(miembrosChicoLocoNetwork, 
+				p -> p.getGenero() == Persona.Genero.MASCULINO 
+				&& (p.getFechaNacimiento().getYear() 
+						- Period.between(LocalDate.now(), p.getFechaNacimiento()).getYears()) > 18);
+		
+		System.out.println("Enfoque 5.4 Lambda con Bloque de codigo: ");
+		RedSocial.buscarPersonasPorCriterioGeneral(miembrosChicoLocoNetwork, 
+				p -> { if(p.getGenero().equals(Persona.Genero.MASCULINO) &&
+						(LocalDate.now().getYear() - p.getFechaNacimiento().getYear())>35)
+							{
+								System.out.println("Viejo Verde");
+								return true;
+							}
+						return false;});
+		
+	
 	}
 
 }
