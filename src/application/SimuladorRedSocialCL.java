@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+
+import application.Persona.Estado;
 
 public class SimuladorRedSocialCL {
 
@@ -115,7 +118,48 @@ public class SimuladorRedSocialCL {
 							}
 						return false;});
 		
-	
-	}
+		
+		System.out.println("Enfoque 6: ");
+		
+		//Enfoque 6: Expresiones Lambda con Interfaces funcionales Standard
+		//Usamos la interfaz Predicate<T> en llugar de la interfaz Criterio
+		//Hombres mayores de edad
+		
+		RedSocial.buscarPersonaPorCriterioIntefazFuncionalStandard(miembrosChicoLocoNetwork, 
+				p -> p.getGenero().equals(Persona.Genero.MASCULINO));
+		
+		
+		System.out.println("Enfoque 7: ");
+		RedSocial.buscarPersonasPorCriterioAplicandoFuncion(miembrosChicoLocoNetwork,
+				p -> p.getFechaNacimiento().getYear()>2000,
+				p -> {p.setEstado(Estado.INACTIVO);});
+		
+		System.out.println("Enfoque 7.1: ");
+		
+		//Enfoque 7: Usando mas Lambdas con interfaces funcionales standard
+		//Agregamos la interfaz funcional block para poder especificar mas acciones
+		RedSocial.buscarPersonasPorCriterioEjecutandoFuncion(miembrosChicoLocoNetwork,
+				p -> (p.getFechaNacimiento().getYear()>1993 
+				 && p.getFechaNacimiento().getYear()<1998) ,
+				p -> {System.out.println("A mesa electoral : " + p.getNombre());
+						});
+		
+		//Ahora hagamos enviemos una expresion lambda que imprima un mensaje que invite a salir a las
+		//personas de la red social que cumplan con nuestros criterios (genero y edades preferidas)
+		//No lo nieguen todos tienen preferencias.
+		
+		System.out.println("Enfoque 7.2: ");
+		RedSocial.buscarPersonasPorCriterioEjecutandoFuncionMapper(miembrosChicoLocoNetwork, 
+				p -> (p.getFechaNacimiento().getYear()<1998), 
+				p -> p.getEmail(), 
+				email -> System.out.println("El email a spamear es: " + email));
+		
+		
 
+		System.out.println("Enfoque 8: ");
+		RedSocial.procesarElementos(miembrosChicoLocoNetwork, 
+				p -> p.getGenero() == Persona.Genero.MASCULINO, 
+				p -> p.getNombre(), 
+				email -> System.out.println("El email a spamear es: " + email));
+	}
 }

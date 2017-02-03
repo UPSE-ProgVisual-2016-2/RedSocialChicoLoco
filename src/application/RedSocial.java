@@ -1,8 +1,12 @@
 package application;
 
+import java.io.LineNumberInputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class RedSocial {
 	List<Persona> miembros = new ArrayList<Persona>();
@@ -76,5 +80,115 @@ public class RedSocial {
 			}
 		}
 		return personasSeleccionadas;
+	}
+	
+	//Enfoque 6: Usando Interfaces Funcionales Standard
+	public static List<Persona> buscarPersonaPorCriterioIntefazFuncionalStandard(List<Persona> miembros,
+			Predicate<Persona> predicateCriterio)
+	{
+		List<Persona> personasSeleccionadas = new ArrayList<Persona>();
+		for(Persona p: miembros)
+		{
+			if(predicateCriterio.test(p))
+			{
+				personasSeleccionadas.add(p);
+				System.out.println(p);
+			}
+		}
+		return personasSeleccionadas;
+		
+	}
+	
+	//Enfoque 7.1: Usando mas Interfaces Funcionales Standard para proveer cualquier funcionalidad
+	//Este metodo recibe cualquier cosa que implemente la interfaz consumer, 
+	//la cual recibe un objeto persona y retorna void
+	//Esto me permitira enviar como parametro cualquier funcion 
+	//que tenga como parametro una persona y ejecute una accion sobre ella (sin retornar nada).
+	public static List<Persona> buscarPersonasPorCriterioAplicandoFuncion(
+			List<Persona> miembros,
+			Predicate<Persona> predicadoACumplir,
+			Consumer<Persona> funcionAAplicar)
+	{
+		List<Persona> seleccionadosAplicadaFuncion = new ArrayList<Persona>();
+		for(Persona p:miembros)
+		{
+			if(predicadoACumplir.test(p))
+			{
+				funcionAAplicar.accept(p);
+				seleccionadosAplicadaFuncion.add(p);
+				System.out.println(p);
+			}
+		}
+		return seleccionadosAplicadaFuncion;
+		
+	}
+	
+	public static List<Persona> buscarPersonasPorCriterioEjecutandoFuncion(List<Persona> miembros,
+			Predicate<Persona> predicateCriterio, Consumer<Persona> funcion)
+	{
+		List<Persona> personasSeleccionadas = new ArrayList<Persona>();
+		for(Persona p:miembros)
+		{
+			if(predicateCriterio.test(p))
+			{
+				funcion.accept(p);
+				personasSeleccionadas.add(p);
+				System.out.println(p);
+			}
+		}
+		return personasSeleccionadas;
+	}
+	
+	//Enfoque 7.2: Usando mas Interfaces Funcionales Standard para proveer cualquier funcionalidad
+	//Este metodo recibe cualquier cosa que implemente la interfaz consumer, 
+	//la cual recibe un objeto persona y retorna void
+	//Esto me permitira enviar como parametro cualquier funcion 
+	//que tenga como parametro una persona y ejecute una accion sobre ella (sin retornar nada).
+	public static List<Persona> buscarPersonasPorCriterioEjecutandoFuncionMapper(List<Persona> miembros,
+				Predicate<Persona> predicateCriterio, 
+				Function<Persona, String> funcionMapper,
+				Consumer<String> funcionConsumidora)
+		{
+			List<Persona> personasSeleccionadas = new ArrayList<Persona>();
+			for(Persona p:miembros)
+			{
+				if(predicateCriterio.test(p))
+				{
+					String email = funcionMapper.apply(p);
+					funcionConsumidora.accept(email);
+					personasSeleccionadas.add(p);
+					System.out.println(p);
+				}
+			}
+			return personasSeleccionadas;
+		}
+	
+	/**
+	 * Enfoque 8: Una funcion general para procesar cualquier tipo de elementos y
+	 * la cual recibe cualquier tipo de implementacion de predicado para evaluar criterio
+	 * recibe cualquier mapper para aplicar a los elementos que cumplen el criterio
+	 * y una funcion consumidora que se ejecuta sobre los resultados de ese mapeo. Visijue!
+	 * @param elementos : Lista de Elementos
+	 * @param predicateGeneral : Predicado (a cumplir)
+	 * @param functionMapper : Funcion a aplicar a los elementos que cumplen con el predicado y que retorna un resultado
+	 * @param funcionConsumidora: Funcion que se ejecuta sobre el resultado del mapeo y que no retorna nada
+	 * @return Lista de Elementos sobre los que se aplico el Predicado
+	 */
+	public static <X, Y> void procesarElementos( Iterable<X> elementos,
+			Predicate<X> predicateGeneral,
+			Function<X,Y> functionMapper, 
+			Consumer<Y> funcionConsumidora)
+	{
+		//List<X> elementosSeleccionados = new ArrayList<X>();
+		for(X x: elementos)
+		{
+			if(predicateGeneral.test(x))
+			{
+				Y resultadoMap = functionMapper.apply(x);
+				funcionConsumidora.accept(resultadoMap);
+				//elementosSeleccionados.add(x);
+			}
+		}
+		//return elementosSeleccionados;
 	}
 }
