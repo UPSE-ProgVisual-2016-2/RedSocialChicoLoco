@@ -139,6 +139,27 @@ public class RedSocial {
 		return personasSeleccionadas;
 	}
 	
+	
+	public static List<String> filtrarPersonasPorCriterioObteniendoEmailYProcesandoEmail(
+			List<Persona> miembros,
+			Predicate<Persona> predicado,
+			Function<Persona, String> funcionMapeadora,
+			Consumer<String> consumidora)
+	{
+		List<String> stringProcesados = new ArrayList<String>();
+		
+		for(Persona p: miembros)
+		{
+			if(predicado.test(p))
+			{
+				String s = funcionMapeadora.apply(p);
+				consumidora.accept(s);
+				stringProcesados.add(s);
+			}
+		}
+		return stringProcesados;
+	}
+	
 	//Enfoque 7.2: Usando mas Interfaces Funcionales Standard para proveer cualquier funcionalidad
 	//Este metodo recibe cualquier cosa que implemente la interfaz consumer, 
 	//la cual recibe un objeto persona y retorna void
@@ -191,4 +212,5 @@ public class RedSocial {
 		}
 		//return elementosSeleccionados;
 	}
-}
+	
+	}

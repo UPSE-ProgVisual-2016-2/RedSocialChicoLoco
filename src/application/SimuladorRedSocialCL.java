@@ -21,7 +21,7 @@ public class SimuladorRedSocialCL {
 		Persona p7 = new Persona("Pelado Salchipapa", LocalDate.of(2004, 1, 10), Persona.Genero.MASCULINO, "pelaosachipapa@ChicoLocoNetwork.org");
 		Persona p8 = new Persona("Chikitap Tucositap favoritak princess <3", LocalDate.of(2003, 12, 6), Persona.Genero.FEMENINO, "tucositap@ChicoLocoNetwork.org");
 		Persona p9 = new Persona("Viejo Depredador", LocalDate.of(1953, 2, 11), Persona.Genero.MASCULINO, "machocastigadorlatino69@ChicoLocoNetwork.org");
-		Persona p10 = new Persona("Princeso Andrew", LocalDate.of(1991, 5, 16), Persona.Genero.ALTERNATIVO, "princesoAndrew@ChicoLocoNetwork.org");
+		Persona p10 = new Persona("Princeso Andrew", LocalDate.of(1991, 5, 16), Persona.Genero.ALTERNATIVO, "princesoAndrew@upse.edu.ec");
 		Persona p11 = new Persona("La Senora Candy", LocalDate.of(1970, 9, 3), Persona.Genero.FEMENINO, "Candysensacion@ChicoLocoNetwork.org");
 		
 		
@@ -144,6 +144,11 @@ public class SimuladorRedSocialCL {
 				p -> {System.out.println("A mesa electoral : " + p.getNombre());
 						});
 		
+		System.out.println("Enfoque 7.1: Dia de la mujer");
+		RedSocial.buscarPersonasPorCriterioEjecutandoFuncion(miembrosChicoLocoNetwork,
+				p -> (p.getGenero().equals(Persona.Genero.FEMENINO)), 
+				m -> {System.out.println("ChicoLoco se preocupa por las mujeres, feliz dia " + m.getNombre());});
+		
 		//Ahora hagamos enviemos una expresion lambda que imprima un mensaje que invite a salir a las
 		//personas de la red social que cumplan con nuestros criterios (genero y edades preferidas)
 		//No lo nieguen todos tienen preferencias.
@@ -154,12 +159,41 @@ public class SimuladorRedSocialCL {
 				p -> p.getEmail(), 
 				email -> System.out.println("El email a spamear es: " + email));
 		
-		
+		System.out.println("Enfoque 7.2 en clase: ");
+		RedSocial.filtrarPersonasPorCriterioObteniendoEmailYProcesandoEmail(
+				miembrosChicoLocoNetwork, 
+				p -> p.getGenero().equals(Persona.Genero.ALTERNATIVO), 
+				p -> p.getNombre() + " " + p.getFechaNacimiento().toString(), 
+				s -> System.out.println(s + " eres aceptado aqui. Todos somos iguales a los ojos de JAVA."));
 
+		System.out.println("Enfoque 7.2 en clase: ");
+		RedSocial.filtrarPersonasPorCriterioObteniendoEmailYProcesandoEmail(
+				miembrosChicoLocoNetwork, 
+				p -> p.getGenero().equals(Persona.Genero.ALTERNATIVO), 
+				p -> p.getEmail(), 
+				s -> ManejadoraEmail.procesarEmail(s));
+		
 		System.out.println("Enfoque 8: ");
 		RedSocial.procesarElementos(miembrosChicoLocoNetwork, 
 				p -> p.getGenero() == Persona.Genero.MASCULINO, 
 				p -> p.getNombre(), 
 				email -> System.out.println("El email a spamear es: " + email));
+		
+		//Enfoque 9: Aggregate Operations
+		System.out.println("Enfoque 9: Streaming de datos");
+		miembrosChicoLocoNetwork
+			.stream()
+			.filter( p -> p.getEstado().equals(Persona.Estado.ACTIVO))
+			.map( p -> p.getEmail())
+			.forEach(email -> System.out.println(email));
+		
+		//Enfoque 9: Aggregate Operations (San Valentin)
+		miembrosChicoLocoNetwork
+			.stream()
+			.filter(p -> p.getGenero().equals(Persona.Genero.MASCULINO))
+			.forEach(p -> System.out.println("Oye " + p.getNombre() + " consigue un regalo de San Valentin si quieres que tu novia te de lo tuyo!"));
+		
 	}
+	
+	
 }
